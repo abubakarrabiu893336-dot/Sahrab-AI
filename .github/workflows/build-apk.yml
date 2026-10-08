@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
@@ -36,13 +36,13 @@ jobs:
       - name: Find project folder
         run: |
           ROOT=$(find project -name settings.gradle.kts -print -quit | xargs dirname)
-          echo "PROJECT_ROOT=$ROOT" >> $GITHUB_ENV
+          echo "PROJECT_ROOT=$ROOT" >> "$GITHUB_ENV"
+          echo "Project root: $ROOT"
 
-            - name: Prepare Android project
+      - name: Prepare Android project
         run: |
           echo "android.useAndroidX=true" > "$PROJECT_ROOT/gradle.properties"
           echo "android.enableJetifier=true" >> "$PROJECT_ROOT/gradle.properties"
-          echo "Gradle properties:"
           cat "$PROJECT_ROOT/gradle.properties"
 
       - name: Build APK
