@@ -4,18 +4,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-java@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: "17"
-      - run: |
-          ls -lh
-          unzip -o SahrabAI_Android_Project.zip
-          ls -lh
-      - run: chmod +x gradlew || chmod +x $(find . -name gradlew | head -1) || true
-      - run: ./gradlew assembleDebug || $(find . -name gradlew | head -1) assembleDebug
-      - uses: actions/upload-artifact@v4
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Unzip
+        run: unzip -o SahrabAI_Android_Project.zip
+      - name: Build
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
           name: Sahrab-AI-APK
-          path: "**/*.apk"
+          path: app/build/outputs/apk/debug/*.apk
