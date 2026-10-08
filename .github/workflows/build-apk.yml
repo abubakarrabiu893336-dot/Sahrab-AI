@@ -9,19 +9,20 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Unzip
+      - name: Unzip and Find
         run: |
           unzip -o SahrabAI_Android_Project.zip
-          ls -lh
-      - name: Build
+          echo "Files after unzip:"
+          ls -R | head -n 50
+      - name: Build APK
         run: |
-          PROJECT_DIR=$(find . -name "gradlew" | head -1 | xargs dirname)
-          echo "Found project at: $PROJECT_DIR"
-          cd $PROJECT_DIR
+          DIR=$(find . -name "gradlew" -type f | head -1 | xargs dirname)
+          echo "Project in: $DIR"
+          cd "$DIR"
           chmod +x gradlew
           ./gradlew assembleDebug
-      - name: Upload APK
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: Sahrab-AI-APK
-          path: "**/build/outputs/apk/debug/*.apk"
+          path: "**/app-debug.apk"
