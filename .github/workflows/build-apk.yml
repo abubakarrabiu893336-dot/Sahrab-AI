@@ -9,24 +9,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Unzip
-        run: |
-          echo "Files in repo:"
-          ls -la
-          echo "---Finding ZIP---"
-          find . -maxdepth 2 -name "*.zip" -type f
-          for z in $(find . -maxdepth 2 -name "*.zip"); do
-            echo "Unzipping $z"
-            unzip -o "$z"
-          done
-          echo "---After unzip---"
-          ls -la
-          find . -name "gradlew"
       - name: Build APK
         run: |
+          echo "Looking for gradlew..."
+          find . -name "gradlew" -type f
           GRADLEW=$(find . -name "gradlew" -type f | head -n 1)
-          echo "Found gradlew at: $GRADLEW"
-          if [ -z "$GRADLEW" ]; then echo "No gradlew found!"; exit 1; fi
+          echo "Found: $GRADLEW"
           cd $(dirname "$GRADLEW")
           chmod +x gradlew
           ./gradlew assembleDebug
