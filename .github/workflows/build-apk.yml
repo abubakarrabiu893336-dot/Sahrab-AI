@@ -1,5 +1,6 @@
 name: Build Sahrab AI APK
-on: workflow_dispatch
+on:
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,13 +10,16 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Build APK
+      - name: Unzip and Build
         run: |
-          echo "Looking for gradlew..."
+          ls -la
+          echo "--- Unzipping ---"
+          unzip -o SahrabAI_Android_*.zip || unzip -o *.zip
+          echo "--- Finding gradlew ---"
           find . -name "gradlew" -type f
-          GRADLEW=$(find . -name "gradlew" -type f | head -n 1)
-          echo "Found: $GRADLEW"
-          cd $(dirname "$GRADLEW")
+          GW=$(find . -name "gradlew" -type f | head -n 1)
+          echo "Using $GW"
+          cd $(dirname "$GW")
           chmod +x gradlew
           ./gradlew assembleDebug
       - name: Upload APK
